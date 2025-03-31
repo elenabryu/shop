@@ -1,0 +1,304 @@
+﻿<UserControl x:Class="shop.ReferenceForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:shop"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="500">
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="Panel.ZIndex" Value="-2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </UserControl.Resources>
+    <UserControl.Background>
+        <ImageBrush ImageSource="Resources/фон.jpg"/>
+    </UserControl.Background>
+    <Grid>
+        <TabControl>
+            <TabControl.Background>
+                <ImageBrush ImageSource="Resources/фон.jpg"/>
+            </TabControl.Background>
+            <TabItem Header="Категории" Height="22" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="CategoryDataGrid" AutoGenerateColumns="False" Grid.Row="0" Grid.ColumnSpan="2" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*"/>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Редактировать" Click="EditButton_Click" Tag="Category" CommandParameter="{Binding}" >
+                                            <Button.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                    <LinearGradientBrush.RelativeTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </LinearGradientBrush.RelativeTransform>
+                                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                                    <GradientStop Color="White" Offset="0.224"/>
+                                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                                </LinearGradientBrush>
+                                            </Button.Background>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
+                        <Button x:Name="AddCategoryButton" Content="Добавить категорию" Click="AddCategoryButton_Click" HorizontalAlignment="Left" Margin="10,10,0,10" Width="157">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <LinearGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </LinearGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.224"/>
+                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Бренды">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="BrandDataGrid" AutoGenerateColumns="False" Grid.Row="0" Grid.ColumnSpan="2" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*"/>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Редактировать" Click="EditButton_Click" Tag="Brand" CommandParameter="{Binding}">
+                                            <Button.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                    <LinearGradientBrush.RelativeTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </LinearGradientBrush.RelativeTransform>
+                                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                                    <GradientStop Color="White" Offset="0.224"/>
+                                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                                </LinearGradientBrush>
+                                            </Button.Background>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
+                        <Button x:Name="AddBrandButton" Content="Добавить бренд" Click="AddBrandButton_Click" HorizontalAlignment="Left" Margin="10,10,0,10">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <LinearGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </LinearGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.224"/>
+                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Поставщики">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="SupplierDataGrid" AutoGenerateColumns="False" Grid.Row="0" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding SupplierName}" Width="*"/>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Редактировать" Click="EditButton_Click" Tag="Supplier" CommandParameter="{Binding}" >
+                                            <Button.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                    <LinearGradientBrush.RelativeTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </LinearGradientBrush.RelativeTransform>
+                                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                                    <GradientStop Color="White" Offset="0.224"/>
+                                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                                </LinearGradientBrush>
+                                            </Button.Background>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <Button x:Name="AddSupplierButton" Content="Добавить поставщика" Click="AddSupplierButton_Click" HorizontalAlignment="Left" Margin="10">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <LinearGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </LinearGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.224"/>
+                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <!-- Добавляем TabItem для ролей -->
+            <TabItem Header="Роли">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="RoleDataGrid" AutoGenerateColumns="False" Grid.Row="0" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название роли" Binding="{Binding RoleName}" Width="*"/>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Редактировать" Click="EditButton_Click" Tag="Role" CommandParameter="{Binding}" >
+                                            <Button.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                    <LinearGradientBrush.RelativeTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                                            <RotateTransform/>
+                                                            <TranslateTransform/>
+                                                        </TransformGroup>
+                                                    </LinearGradientBrush.RelativeTransform>
+                                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                                    <GradientStop Color="White" Offset="0.224"/>
+                                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                                </LinearGradientBrush>
+                                            </Button.Background>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <Button x:Name="AddRoleButton" Content="Добавить роль" Click="AddRoleButton_Click" HorizontalAlignment="Left" Margin="10">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <LinearGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                            <SkewTransform AngleY="1" AngleX="1"/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </LinearGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FF80B3C3" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.224"/>
+                                    <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,138 @@
+﻿<Window x:Class="shop.EmployeeEditForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:shop"
+        mc:Ignorable="d"
+        Title="Добавить/Редактировать сотрудника" Height="413" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="Panel.ZIndex" Value="-2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/фон.jpg"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Labels and TextBoxes for Employee Information -->
+        <Label Grid.Row="0" Grid.Column="0" Content="Фамилия:" Margin="10"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtSurname" Margin="10" MaxLength="20" PreviewTextInput="txtSurname_PreviewTextInput"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Имя:" Margin="10"/>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtName" Margin="10" MaxLength="20" PreviewTextInput="txtName_PreviewTextInput"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Отчество:" Margin="10"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtPatronymic" Margin="10" MaxLength="20" PreviewTextInput="txtPatronymic_PreviewTextInput"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Email:" Margin="10"/>
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtEmail" Margin="10" MaxLength="50" PreviewTextInput="txtEmail_PreviewTextInput"/>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Номер телефона:" Margin="10"/>
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtPhoneNumber" Margin="10" MaxLength="11" PreviewTextInput="txtPhoneNumber_PreviewTextInput"/>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Адрес:" Margin="10"/>
+        <TextBox Grid.Row="5" Grid.Column="1" x:Name="txtAddress" Margin="10" MaxLength="255" PreviewTextInput="txtAddress_PreviewTextInput"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Сохранить" Width="120" Margin="5" Click="SaveButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="Отмена" Width="120" Margin="5" Click="CancelButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

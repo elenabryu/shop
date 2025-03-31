@@ -1,0 +1,145 @@
+﻿<Window x:Class="shop.SellerMainForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:shop"
+        mc:Ignorable="d"
+        Title="Главная форма Продавца" WindowStartupLocation="CenterScreen" MinHeight="610" MinWidth="1000" WindowState="Maximized">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="Panel.ZIndex" Value="-2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/фон.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Background="#FF99CFDD" Orientation="Horizontal" Height="40">
+            <Image Source="Resources/logo.png" Width="30" Height="30" Margin="5" Stretch="Fill"/>
+            <TextBlock Text="Продавец" Foreground="White" FontSize="16" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,353">
+            <StackPanel.Background>
+                <ImageBrush ImageSource="Resources/фон.jpg" Stretch="UniformToFill"/>
+            </StackPanel.Background>
+            <Button Content="Товары" Margin="5" Padding="10" Click="ProductsButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="Клиенты" Margin="5" Padding="10" Click="ClientButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="Продажи" Margin="5" Padding="10" Click="SalesButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="Чек" Margin="5" Padding="10" Click="СheckButton_Click">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                <SkewTransform AngleY="1" AngleX="1"/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF80B3C3" Offset="1"/>
+                        <GradientStop Color="White" Offset="0.224"/>
+                        <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+
+        </StackPanel>
+
+        <ContentControl x:Name="MainContent" Grid.Row="1" Grid.Column="1" Margin="10"/>
+
+        <Button Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"  Grid.Row="1"  Click="Button_Click" BorderBrush="{x:Null}" Width="63" Height="48">
+            <Button.Background>
+                <ImageBrush ImageSource="Resources/free-icon-exit-1286907.png"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>
