@@ -5,12 +5,12 @@ namespace shop
 {
     public partial class AdminMainForm : Window
     {
-        public AdminMainForm()
+        private bool _isDefaultAdmin;
+        public AdminMainForm(bool isDefaultAdmin = false) 
         {
             InitializeComponent();
-
+            _isDefaultAdmin = isDefaultAdmin;
         }
-
         private void ProductsButton_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new ProductsForm();
@@ -35,7 +35,6 @@ namespace shop
         {
             MainContent.Content = new ReportsForm();
         }
-
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             LoginForm loginWindow = new LoginForm();

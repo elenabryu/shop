@@ -30,6 +30,14 @@ namespace shop
                 return;
             }
 
+            if (login == "admin" && password == "admin")
+            {
+                RestoringAndImportingForm restoringandimportingForm = new RestoringAndImportingForm();
+                restoringandimportingForm.Show();
+                this.Close();
+                return;
+            }
+
             try
             {
                 string connectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
@@ -55,7 +63,6 @@ namespace shop
                                 adminForm.Show();
                                 break;
                             case 2:
-                                // Получаем EmployeeID из базы данных
                                 string employeeIdQuery = "SELECT UserEmployeeID FROM User WHERE UserLogin = @Login";
                                 using (MySqlCommand employeeIdCommand = new MySqlCommand(employeeIdQuery, connection))
                                 {
@@ -63,7 +70,7 @@ namespace shop
                                     int loggedInEmployeeID = Convert.ToInt32(employeeIdCommand.ExecuteScalar());
 
                                     SellerMainForm sellerForm = new SellerMainForm();
-                                    sellerForm.LoggedInEmployeeID = loggedInEmployeeID; // Передаем ID
+                                    sellerForm.LoggedInEmployeeID = loggedInEmployeeID;
                                     sellerForm.Show();
                                 }
                                 break;

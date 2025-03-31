@@ -141,6 +141,9 @@
     <Compile Include="ReportsForm.xaml.cs">
       <DependentUpon>ReportsForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RestoringAndImportingForm.xaml.cs">
+      <DependentUpon>RestoringAndImportingForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SaleEditForm.xaml.cs">
       <DependentUpon>SaleEditForm.xaml</DependentUpon>
     </Compile>
@@ -231,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReportsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RestoringAndImportingForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
