@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:shop"
-        mc:Ignorable="d">
+        mc:Ignorable="d" Height="413.672">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -52,7 +52,7 @@
             <Setter Property="Padding" Value="5"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="0,0,0,3">
         <Grid.Background>
             <ImageBrush ImageSource="/Resources/фон.jpg"/>
         </Grid.Background>
@@ -94,9 +94,5 @@
         </GroupBox>
 
         <TextBlock Grid.Row="3" x:Name="StatusTextBlock" Text="" HorizontalAlignment="Center" Margin="10" FontSize="16" FontWeight="Bold" />
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Очистить базу данных" Margin="5" Width="150" Click="ClearDatabaseButton_Click" Background="{x:Null}"/>
-            <Button Content="Создать таблицы" Margin="5" Width="150" Click="CreateTablesButton_Click" Background="{x:Null}"/>
-        </StackPanel>
     </Grid>
 </Window>
