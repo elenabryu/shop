@@ -4,9 +4,99 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:shop"
-        mc:Ignorable="d"
-        Title="RestoringAndImportingForm" Height="450" Width="800">
+        mc:Ignorable="d">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="Panel.ZIndex" Value="-2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/фон.jpg"/>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Восстановление и Импорт Базы Данных" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" FontFamily="Comic Sans MS"/>
+
+        <GroupBox Grid.Row="1" Header="Восстановление Базы Данных" Margin="10" BorderBrush="#FF5FBBD4" FontFamily="Comic Sans MS" FontSize="16">
+            <Button Content="Восстановить Базу Данных" Margin="0,10,0,0" Click="RestoreDatabaseButton_Click" Background="{x:Null}"/>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Импорт Данных из CSV" Margin="10" BorderBrush="#FF5FBBD4" FontFamily="Comic Sans MS" FontSize="16">
+            <StackPanel Margin="10">
+                <TextBlock Text="Выберите CSV файл:" Margin="0,0,0,5"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="ImportFilePathTextBox" Width="300" IsReadOnly="True" Margin="0,0,10,0"/>
+                    <Button Content="Обзор..." Width="100" Click="BrowseImportFileButton_Click" Background="{x:Null}"/>
+                </StackPanel>
+                <ComboBox x:Name="TableSelectionComboBox" Margin="0,10,0,5" SelectedIndex="0">
+                    <ComboBoxItem>Role</ComboBoxItem>
+                    <ComboBoxItem>Employee</ComboBoxItem>
+                    <ComboBoxItem>User</ComboBoxItem>
+                    <ComboBoxItem>Client</ComboBoxItem>
+                    <ComboBoxItem>Category</ComboBoxItem>
+                    <ComboBoxItem>Brand</ComboBoxItem>
+                    <ComboBoxItem>Supplier</ComboBoxItem>
+                    <ComboBoxItem>Product</ComboBoxItem>
+                </ComboBox>
+                <Button Content="Импортировать Данные" Margin="0,10,0,0" Click="ImportDataButton_Click" Background="{x:Null}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <TextBlock Grid.Row="3" x:Name="StatusTextBlock" Text="" HorizontalAlignment="Center" Margin="10" FontSize="16" FontWeight="Bold" />
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Очистить базу данных" Margin="5" Width="150" Click="ClearDatabaseButton_Click" Background="{x:Null}"/>
+            <Button Content="Создать таблицы" Margin="5" Width="150" Click="CreateTablesButton_Click" Background="{x:Null}"/>
+        </StackPanel>
     </Grid>
 </Window>
