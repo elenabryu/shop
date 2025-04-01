@@ -46,5 +46,10 @@ namespace shop
         {
             MainContent.Content = new ReferenceForm();
         }
+
+        private void RestoringAndImporting_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new RestoringAndImportingAdmin();
+        }
     }
 }

@@ -1,0 +1,6 @@
+EmployeeID;EmployeeSurname;EmployeeName;EmployeePatronymic;Email;PhoneNumber;Address
+1;Иванов;Иван;Иванович;ivanov@example.com;89161234567;Москва, ул. Тверская, 1
+2;Петров;Петр;Петрович;petrov@example.com;89267890123;Санкт-Петербург, Невский пр., 2
+3;Сидоров;Сидор;Сидорович;sidorov@example.com;89034567890;Казань, ул. Баумана, 3
+4;Смирнова;Елена;Сергеевна;smirnova@example.com;89671112233;Екатеринбург, пр. Ленина, 4
+5;Кузнецова;Ольга;Алексеевна;kuznetsova@example.com;89854445566;Новосибирск, Красный пр., 5

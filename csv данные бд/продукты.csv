@@ -1,0 +1,50 @@
+ProductID;ProductName;ProductDescription;Price;StockQuantity;CategoryID;BrandID;ProductPhoto;SupplierID
+1;Chanel No. 5;Классический аромат для женщин;12000.0;10;1;1;chanel_no5.jpg;1
+2;Dior Sauvage;Мужской аромат;9500.0;15;1;2;dior_sauvage.jpg;2
+3;Lancome Hypnose;Тушь для ресниц;2500.0;20;2;3;lancome_hypnose.jpg;3
+4;Estee Lauder Advanced Night Repair;Сыворотка для лица;7000.0;12;3;4;estee_lauder_anr.jpg;4
+5;MAC Lipstick Ruby Woo;Красная помада;1800.0;25;2;5;mac_ruby_woo.jpg;1
+6;L'Oreal Elvive Shampoo;Шампунь для поврежденных волос;400.0;50;4;6;loreal_elvive_shampoo.jpg;2
+7;Chanel Coco Mademoiselle;Аромат для женщин;11000.0;8;1;1;chanel_coco.jpg;1
+8;Dior J'adore;Аромат для женщин;10000.0;13;1;2;dior_jadore.jpg;2
+9;Lancome La Vie Est Belle;Аромат для женщин;9000.0;17;1;3;lancome_lavie.jpg;3
+10;Estee Lauder Double Wear Foundation;Тональный крем;4500.0;10;2;4;estee_lauder_dw.jpg;4
+11;MAC Eyeshadow Palette;Палетка теней для век;3500.0;15;2;5;mac_eyeshadow.jpg;1
+12;L'Oreal Hair Mask;Маска для волос;600.0;40;4;6;loreal_hair_mask.jpg;2
+13;Chanel Bleu de Chanel;Мужской аромат;10500.0;9;1;1;chanel_bleu.jpg;1
+14;Dior Miss Dior;Аромат для женщин;9800.0;14;1;2;dior_missdior.jpg;2
+15;Lancome Teint Miracle Foundation;Тональный крем;4200.0;11;2;3;lancome_teint.jpg;3
+16;Estee Lauder DayWear Cream;Дневной крем для лица;5500.0;16;3;4;estee_lauder_dwcream.jpg;4
+17;MAC Blush;Румяна;2200.0;20;2;5;mac_blush.jpg;1
+18;L'Oreal Volume Filler Conditioner;Кондиционер для объема волос;450.0;45;4;6;loreal_vf_conditioner.jpg;2
+19;Chanel Rouge Allure Velvet Lipstick;Матовая помада;3200.0;18;2;1;chanel_rouge_allure.jpg;1
+20;Dior Addict Lip Glow;Бальзам для губ;2800.0;22;2;2;dior_addict_lip.jpg;2
+21;Lancome Bi-Facil Eye Makeup Remover;Средство для снятия макияжа с глаз;1500.0;30;3;3;lancome_bifacil.jpg;3
+22;Estee Lauder Micro Essence;Микро-эссенция для лица;6000.0;13;3;4;estee_lauder_micro.jpg;4
+23;MAC Prep + Prime Fix+;Спрей для фиксации макияжа;2000.0;25;2;5;mac_fixplus.jpg;1
+24;L'Oreal Extraordinary Oil;Масло для волос;700.0;35;4;6;loreal_exo.jpg;2
+25;Chanel Chance Eau Tendre;Аромат для женщин;11500.0;10;1;1;chanel_chance.jpg;1
+26;Dior Homme;Мужской аромат;9200.0;15;1;2;dior_homme.jpg;2
+27;Lancome Grandiose Mascara;Тушь для ресниц;2600.0;20;2;3;lancome_grand.jpg;3
+28;Estee Lauder Revitalizing Supreme+ Cream;Крем для лица;7500.0;12;3;4;estee_lauder_revitalizing.jpg;4
+29;MAC Studio Fix Fluid Foundation;Тональный крем;3800.0;25;2;5;mac_studiofix.jpg;1
+30;L'Oreal Color Riche Lipstick;Помада для губ;550.0;50;2;6;loreal_colorriche.jpg;2
+31;Chanel Le Vernis Nail Colour;Лак для ногтей;2000.0;18;2;1;chanel_le_vernis.jpg;1
+32;Dior Forever Skin Glow Foundation;Тональный крем;4800.0;22;2;2;dior_forever.jpg;2
+33;Lancome Tonique Confort;Успокаивающий тоник для лица;1800.0;30;3;3;lancome_tonique.jpg;3
+34;Estee Lauder Perfectionist Pro Serum;Сыворотка для лица;6500.0;13;3;4;estee_lauder_perfectionist.jpg;4
+35;MAC Mineralize Skinfinish;Пудра для лица;3000.0;25;2;5;mac_mineralize.jpg;1
+36;L'Oreal Elseve Dream Lengths Leave-In;Несмываемый уход для волос;500.0;35;4;6;loreal_dreamlengths.jpg;2
+37;Chanel Hydra Beauty Micro Serum;Увлажняющая сыворотка для лица;8000.0;10;3;1;chanel_hydra_beauty.jpg;1
+38;Dior Backstage Eyeshadow Palette;Палетка теней для век;5000.0;15;2;2;dior_backstage.jpg;2
+39;Lancome Advanced Genifique Serum;Сыворотка для лица;7200.0;20;3;3;lancome_genifique.jpg;3
+40;Estee Lauder Sumptuous Extreme Mascara;Тушь для ресниц;2700.0;12;2;4;estee_lauder_sumptuous.jpg;4
+41;MAC Strobe Cream;Крем-хайлайтер;2500.0;25;2;5;mac_strobe.jpg;1
+42;L'Oreal Studio Line Hair Gel;Гель для волос;350.0;50;4;6;loreal_studioline.jpg;2
+43;Chanel Sublimage La Creeeme;Крем для лица;25000.0;5;3;1;chanel_sublimage.jpg;1
+44;Dior Rouge Dior Lipstick;Помада для губ;3500.0;20;2;2;dior_rougedior.jpg;2
+45;Lancome Renergie Multi-Lift Cream;Крем для лица;8500.0;10;3;3;lancome_renergie.jpg;3
+46;Estee Lauder Bronze Goddess Bronzer;Бронзер;3200.0;15;2;4;estee_lauder_bronze.jpg;4
+47;MAC Pro Longwear Paint Pot;Кремовые тени;2100.0;22;2;5;mac_paintpot.jpg;1
+48;L'Oreal Age Perfect Cleansing Milk;Молочко для снятия макияжа;400.0;30;3;6;loreal_ageperfect.jpg;4
+49;Chanel Boy de Chanel Foundation;Тональный крем для мужчин;6000.0;8;2;1;chanel_boy.jpg;1

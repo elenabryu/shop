@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:shop"
              mc:Ignorable="d">
-    <!-- Убраны Height="533" Width="767" -->
     <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
@@ -59,11 +58,8 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Заголовок -->
             <RowDefinition Height="*"/>
-            <!-- DataGrid, занимает остаток места -->
             <RowDefinition Height="Auto"/>
-            <!-- Кнопки -->
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Управление пользователями" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" FontFamily="Comic Sans MS"/>

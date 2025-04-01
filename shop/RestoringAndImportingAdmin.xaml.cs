@@ -10,14 +10,15 @@ using System.Windows.Controls;
 
 namespace shop
 {
-    public partial class RestoringAndImportingForm : Window
+    /// <summary>
+    /// Логика взаимодействия для RestoringAndImportingAdmin.xaml
+    /// </summary>
+    public partial class RestoringAndImportingAdmin : UserControl
     {
         private string connectionString;
-
-        public RestoringAndImportingForm()
+        public RestoringAndImportingAdmin()
         {
-            InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
+            InitializeComponent(); connectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
         }
 
         private async void RestoreDatabaseButton_Click(object sender, RoutedEventArgs e)
@@ -129,7 +130,7 @@ CREATE TABLE SaleDetail (
                     {
                         foreach (string sqlCommand in commands)
                         {
-                            if (string.IsNullOrWhiteSpace(sqlCommand)) continue; 
+                            if (string.IsNullOrWhiteSpace(sqlCommand)) continue;
 
                             command.CommandText = sqlCommand;
                             await command.ExecuteNonQueryAsync();
@@ -251,7 +252,7 @@ CREATE TABLE SaleDetail (
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND TABLE_SCHEMA = '{connection.Database}' ORDER BY ORDINAL_POSITION;"; 
+                string query = $"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' AND TABLE_SCHEMA = '{connection.Database}' ORDER BY ORDINAL_POSITION;";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     using (MySqlDataReader reader = command.ExecuteReader())
@@ -264,17 +265,10 @@ CREATE TABLE SaleDetail (
                 }
             }
 
-            columnNames = string.Join(",", columnList); 
-            valuePlaceholders = string.Join(",", values.Select(v => $"'{v}'")); 
+            columnNames = string.Join(",", columnList);
+            valuePlaceholders = string.Join(",", values.Select(v => $"'{v}'"));
 
             return $"INSERT INTO {tableName} ({columnNames}) VALUES ({valuePlaceholders});";
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            LoginForm loginWindow = new LoginForm();
-            loginWindow.Show();
-            this.Close();
         }
     }
 }

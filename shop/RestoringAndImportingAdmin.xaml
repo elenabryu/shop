@@ -1,12 +1,12 @@
-﻿<Window x:Class="shop.RestoringAndImportingForm"
+﻿<UserControl x:Class="shop.RestoringAndImportingAdmin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:shop"
-        mc:Ignorable="d" Height="471.62" Width="900" WindowStartupLocation="CenterScreen" Title="Восстановлении и импортирование">
+        mc:Ignorable="d">
 
-    <Window.Resources>
+    <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="Height" Value="36"/>
@@ -51,8 +51,8 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="5"/>
         </Style>
-    </Window.Resources>
-    <Grid Margin="0,0,0,-31">
+    </UserControl.Resources>
+    <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/Resources/фон.jpg"/>
         </Grid.Background>
@@ -97,18 +97,5 @@
         </GroupBox>
 
         <TextBlock Grid.Row="3" x:Name="StatusTextBlock" Text="" HorizontalAlignment="Center" Margin="380,10" FontSize="16" FontWeight="Bold" />
-        <Button Content="" HorizontalAlignment="Left" Margin="3,8,0,0" Grid.Row="3" VerticalAlignment="Top" Width="53" RenderTransformOrigin="0.583,-0.206" BorderBrush="{x:Null}" Height="40" Grid.RowSpan="3" Click="Button_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <ImageBrush ImageSource="Resources/free-icon-exit-1286907.png"/>
-            </Button.Background>
-        </Button>
     </Grid>
-</Window>
+</UserControl>
