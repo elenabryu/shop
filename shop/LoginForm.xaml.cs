@@ -9,6 +9,7 @@ namespace shop
 {
     public partial class LoginForm : Window
     {
+        private string _captchaCode;
         private bool _isPasswordVisible = false;
         private int _loginAttempts = 0;
         private const int MaxLoginAttempts = 2;
@@ -16,8 +17,14 @@ namespace shop
         public LoginForm()
         {
             InitializeComponent();
+            GenerateCaptcha();
         }
 
+        private void GenerateCaptcha()
+        {
+            _captchaCode = CaptchaGenerator.GenerateRandomCode(4);
+            captchaImage.Source = CaptchaGenerator.GenerateImage(_captchaCode);
+        }
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             string login = textBoxLogin.Text.Trim();
@@ -149,3 +156,4 @@ namespace shop
         }
     }
 }
+

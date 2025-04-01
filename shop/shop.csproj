@@ -112,6 +112,7 @@
     <Compile Include="AddSupplier.xaml.cs">
       <DependentUpon>AddSupplier.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CaptchaGenerator.cs" />
     <Compile Include="CheckForm.xaml.cs">
       <DependentUpon>CheckForm.xaml</DependentUpon>
     </Compile>
