@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using MySql.Data.MySqlClient;
+using System.Windows.Input;
 
 namespace shop
 {
@@ -12,23 +13,27 @@ namespace shop
         private string _captchaCode;
         private bool _isPasswordVisible = false;
         private int _loginAttempts = 0;
-        private const int MaxLoginAttempts = 2;
+        private const int MaxLoginAttempts = 3;
+        private DateTime _accountLockoutTime;
+        private const int AccountLockoutDuration = 10;
 
         public LoginForm()
         {
             InitializeComponent();
-            GenerateCaptcha();
         }
 
         private void GenerateCaptcha()
         {
             _captchaCode = CaptchaGenerator.GenerateRandomCode(4);
             captchaImage.Source = CaptchaGenerator.GenerateImage(_captchaCode);
+            textBoxCaptcha.Clear();
+            textBoxCaptcha.Focus();
         }
+
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             string login = textBoxLogin.Text.Trim();
-            string password = passwordBoxPassword.Password;
+            string password = _isPasswordVisible ? textBoxVisiblePassword.Text : passwordBoxPassword.Password;
             string hashedPassword = HashPassword(password);
 
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
@@ -37,13 +42,31 @@ namespace shop
                 return;
             }
 
-            if (login == "admin" && password == "admin")
+            if (_accountLockoutTime > DateTime.Now)
             {
-                RestoringAndImportingForm restoringandimportingForm = new RestoringAndImportingForm();
-                restoringandimportingForm.Show();
-                this.Close();
+                TimeSpan remaining = _accountLockoutTime - DateTime.Now;
+                MessageBox.Show($"Аккаунт заблокирован. Пожалуйста, подождите {remaining.Seconds} секунд.", "Блокировка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+            if (captchaPanel.Visibility == Visibility.Visible)
+            {
+                string enteredCaptcha = textBoxCaptcha.Text.Trim();
+
+                if (string.IsNullOrEmpty(enteredCaptcha))
+                {
+                    MessageBox.Show("Пожалуйста, введите CAPTCHA.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (enteredCaptcha.ToUpper() != _captchaCode.ToUpper())
+                {
+                    MessageBox.Show("Неверный код CAPTCHA.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    GenerateCaptcha();
+                    return;
+                }
+            }
+
 
             try
             {
@@ -61,6 +84,7 @@ namespace shop
 
                     if (result != null)
                     {
+                        _loginAttempts = 0;
                         int roleId = Convert.ToInt32(result);
 
                         switch (roleId)
@@ -78,6 +102,7 @@ namespace shop
 
                                     SellerMainForm sellerForm = new SellerMainForm();
                                     sellerForm.LoggedInEmployeeID = loggedInEmployeeID;
+
                                     sellerForm.Show();
                                 }
                                 break;
@@ -91,16 +116,29 @@ namespace shop
                     else
                     {
                         _loginAttempts++;
+
                         if (_loginAttempts >= MaxLoginAttempts)
                         {
-                            MessageBox.Show("Превышено количество попыток входа. Пожалуйста, заполните поля логина и пароля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            _accountLockoutTime = DateTime.Now.AddSeconds(AccountLockoutDuration);
+                            MessageBox.Show($"Превышено количество попыток входа. Аккаунт заблокирован на {AccountLockoutDuration} секунд.", "Блокировка", MessageBoxButton.OK, MessageBoxImage.Warning);
                             textBoxLogin.Text = "";
                             passwordBoxPassword.Password = "";
+                            textBoxVisiblePassword.Text = ""; 
+                            textBoxCaptcha.Text = "";       
+                            captchaPanel.Visibility = Visibility.Collapsed; 
+                            return;
+                        }
 
+                        MessageBox.Show("Неверный логин или пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        if (captchaPanel.Visibility != Visibility.Visible)
+                        {
+                            GenerateCaptcha();
+                            captchaPanel.Visibility = Visibility.Visible;
                         }
                         else
                         {
-                            MessageBox.Show("Неверный логин или пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            GenerateCaptcha();
                         }
                     }
                 }
@@ -109,6 +147,11 @@ namespace shop
             {
                 MessageBox.Show($"Ошибка при подключении к базе данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ButtonRefreshCaptcha_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateCaptcha();
         }
 
         private string HashPassword(string password)
@@ -134,6 +177,7 @@ namespace shop
                 Application.Current.Shutdown();
             }
         }
+
         private void ShowPasswordButton_Click(object sender, RoutedEventArgs e)
         {
             _isPasswordVisible = !_isPasswordVisible;
@@ -144,16 +188,15 @@ namespace shop
                 passwordBoxPassword.Visibility = Visibility.Collapsed;
                 textBoxVisiblePassword.Visibility = Visibility.Visible;
                 ShowPasswordButton.Content = "👁";
-
             }
             else
             {
-                passwordBoxPassword.Password = textBoxVisiblePassword.Text;
-                textBoxVisiblePassword.Visibility = Visibility.Collapsed;
+                textBoxVisiblePassword.Text = passwordBoxPassword.Password;
                 passwordBoxPassword.Visibility = Visibility.Visible;
+                textBoxVisiblePassword.Visibility = Visibility.Collapsed;
                 ShowPasswordButton.Content = "👁‍🗨";
+                passwordBoxPassword.Focus();  
             }
         }
     }
 }
-

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Авторизация" Height="480" Width="400"
+        Title="Авторизация" Height="600" Width="400"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -61,7 +61,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="0,0,0,3" Cursor="">
+    <Grid Margin="0,0,0,4" Cursor="">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="18*"/>
             <ColumnDefinition Width="383*"/>
@@ -103,9 +103,15 @@
                  Padding="8" MaxLength="20"/>
                 </Grid>
             </StackPanel>
-            <StackPanel Margin="0,0,0,15">
-                <Label Content="CAPTHA:"/>
-                <Image x:Name="captchaImage" Width="100" Height="30" />
+            <StackPanel x:Name="captchaPanel" Visibility="Collapsed" Margin="0,0,0,15">
+                <StackPanel Margin="0,0,0,15">
+                    <Label Content="CAPTHA:"/>
+                    <Image x:Name="captchaImage" Width="100" Height="30" />
+                </StackPanel>
+                <StackPanel Margin="0,0,0,15">
+                    <Label Content="Введите CAPTCHA:"/>
+                    <TextBox x:Name="textBoxCaptcha" MaxLength="4"/>
+                </StackPanel>
             </StackPanel>
 
             <Button x:Name="buttonLogin" Content="Войти" Click="ButtonLogin_Click" Margin="93,0,92.667,0">
@@ -126,7 +132,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <Button Content="" HorizontalAlignment="Left" Margin="308,389,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="46" Height="41" BorderBrush="#00000000" Click="Button_Click" Grid.Column="1">
+        <Button Content="" HorizontalAlignment="Left" Margin="308,452,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="46" Height="41" BorderBrush="#00000000" Click="Button_Click" Grid.Column="1">
             <Button.Background>
                 <ImageBrush ImageSource="Resources/free-icon-exit-1286907.png"/>
             </Button.Background>
