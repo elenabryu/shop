@@ -21,9 +21,9 @@ namespace shop
 
         public static BitmapImage GenerateImage(string captchaCode)
         {
-            int width = 150; 
-            int height = 60; 
-            int fontSize = 25; 
+            int width = 150;
+            int height = 60;
+            int fontSize = 25;
 
             var bitmap = new System.Drawing.Bitmap(width, height);
             using (var graphics = System.Drawing.Graphics.FromImage(bitmap))
@@ -37,14 +37,14 @@ namespace shop
                 {
                     float x = 10 + (width - 20) * i / captchaCode.Length;
                     float y = 10 + Random.Next(-5, 5);
-                    float angle = Random.Next(-20, 20); 
+                    float angle = Random.Next(-20, 20);
 
                     using (var matrix = new System.Drawing.Drawing2D.Matrix())
                     {
-                        matrix.RotateAt(angle, new System.Drawing.PointF(x + fontSize / 2, y + fontSize / 2)); 
+                        matrix.RotateAt(angle, new System.Drawing.PointF(x + fontSize / 2, y + fontSize / 2));
                         graphics.Transform = matrix;
                         graphics.DrawString(captchaCode[i].ToString(), font, new System.Drawing.SolidBrush(color), x, y);
-                        graphics.ResetTransform(); 
+                        graphics.ResetTransform();
                     }
 
                     int lineX1 = Random.Next(0, width);
@@ -52,9 +52,26 @@ namespace shop
                     int lineX2 = Random.Next(0, width);
                     int lineY2 = Random.Next(0, height);
                     graphics.DrawLine(new System.Drawing.Pen(System.Drawing.Color.Gray, 2), lineX1, lineY1, lineX2, lineY2);
-                }
-            }
 
+                    if (i < captchaCode.Length - 1 && Random.Next(0, 2) == 0) 
+                    {
+                        float overlapX = 10 + (width - 20) * (i + 0.5f) / captchaCode.Length; 
+                        float overlapY = 10 + Random.Next(-5, 5);
+                        float overlapAngle = Random.Next(-20, 20);
+
+                        using (var matrix = new System.Drawing.Drawing2D.Matrix())
+                        {
+                            matrix.RotateAt(overlapAngle, new System.Drawing.PointF(overlapX + fontSize / 2, overlapY + fontSize / 2));
+                            graphics.Transform = matrix;
+                            graphics.DrawString(captchaCode[i + 1].ToString(), font, new System.Drawing.SolidBrush(System.Drawing.Color.LightGray), overlapX, overlapY);
+                            graphics.ResetTransform();
+                        }
+                    }
+
+                }
+
+
+            }
             using (MemoryStream memory = new MemoryStream())
             {
                 bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);

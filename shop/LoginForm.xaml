@@ -112,7 +112,25 @@
                     <Label Content="Введите CAPTCHA:"/>
                     <TextBox x:Name="textBoxCaptcha" MaxLength="4"/>
                 </StackPanel>
+                <Button x:Name="buttonRefreshCaptcha" Content="Обновить CAPTCHA" Click="ButtonRefreshCaptcha_Click" Margin="93,0,92.667,0">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                    <SkewTransform AngleY="1" AngleX="1"/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="#FF80B3C3" Offset="1"/>
+                            <GradientStop Color="White" Offset="0.224"/>
+                            <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
             </StackPanel>
+
 
             <Button x:Name="buttonLogin" Content="Войти" Click="ButtonLogin_Click" Margin="93,0,92.667,0">
                 <Button.Background>
@@ -132,7 +150,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
-        <Button Content="" HorizontalAlignment="Left" Margin="308,452,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="46" Height="41" BorderBrush="#00000000" Click="Button_Click" Grid.Column="1">
+        <Button Content="" HorizontalAlignment="Left" Margin="318,512,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="46" Height="41" BorderBrush="#00000000" Click="Button_Click" Grid.Column="1">
             <Button.Background>
                 <ImageBrush ImageSource="Resources/free-icon-exit-1286907.png"/>
             </Button.Background>
