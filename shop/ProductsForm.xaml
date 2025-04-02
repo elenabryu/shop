@@ -44,6 +44,7 @@
             <Setter Property="Padding" Value="5"/>
         </Style>
         <Style TargetType="ComboBox">
+
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="BorderBrush" Value="#FF5FBBD4"/>
@@ -58,15 +59,11 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Управление товарами -->
             <RowDefinition Height="Auto"/>
-            <!-- Поиск -->
             <RowDefinition Height="Auto"/>
-            <!-- Фильтры и сортировка -->
             <RowDefinition Height="*"/>
-            <!-- DataGrid -->
             <RowDefinition Height="Auto"/>
-            <!-- Кнопки управления -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Управление товарами" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" FontFamily="Comic Sans MS"/>
@@ -114,13 +111,14 @@
                     <Button Content="" Click="ClearFiltersButton_Click" Height="26" Width="29" BorderBrush="{x:Null}">
                         <Button.Background>
                             <ImageBrush ImageSource="Resources/free-icon-cross-mark.png"/>
+
                         </Button.Background>
                     </Button>
                 </StackPanel>
             </StackPanel>
         </Grid>
 
-        <DataGrid x:Name="ProductsDataGrid" Grid.Row="3" AutoGenerateColumns="False" IsReadOnly="True" Margin="10" Background="Snow">
+        <DataGrid x:Name="ProductsDataGrid" Grid.Row="3" AutoGenerateColumns="False" IsReadOnly="True" Margin="10" Background="Snow" ItemsSource="{Binding CurrentProductsPageView}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Изображение" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
@@ -176,7 +174,9 @@
             </Button>
             <Button Content="Удалить товар" Margin="5" Width="129" Click="DeleteProductButton_Click">
                 <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush EndPoint="0.5
+
+,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                         <LinearGradientBrush.RelativeTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleY="1" ScaleX="-1"/>
@@ -192,5 +192,7 @@
                 </Button.Background>
             </Button>
         </StackPanel>
+
+        <StackPanel x:Name="PaginationPanel" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10"/>
     </Grid>
 </UserControl>

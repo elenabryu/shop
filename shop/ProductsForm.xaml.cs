@@ -27,6 +27,44 @@ namespace shop
         private string imageFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         private BitmapImage _defaultImage;
 
+        private int _pageSize = 20; 
+        private int _currentPage = 1; 
+        private int _totalProductsCount = 0; 
+        private ObservableCollection<Product> _currentProductsPageView; 
+        public ObservableCollection<Product> CurrentProductsPageView
+        {
+            get { return _currentProductsPageView; }
+            set
+            {
+                _currentProductsPageView = value;
+                OnPropertyChanged(nameof(CurrentProductsPageView));
+            }
+        }
+
+        public int CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                if (_currentPage != value && value > 0 && value <= TotalPages)
+                {
+                    _currentPage = value;
+                    OnPropertyChanged(nameof(CurrentPage));
+                    UpdateCurrentPageView();
+                }
+            }
+        }
+
+        public int TotalPages
+        {
+            get
+            {
+                return (int)Math.Ceiling((double)_totalProductsCount / _pageSize);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<Product> Products
         {
             get { return products; }
@@ -35,6 +73,10 @@ namespace shop
                 products = value;
                 OnPropertyChanged(nameof(Products));
                 ApplyFilters();
+                _totalProductsCount = Products.Count;
+                CurrentPage = 1;
+                UpdateCurrentPageView();
+
             }
         }
 
@@ -48,13 +90,10 @@ namespace shop
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
 
         public ProductsForm()
         {
@@ -66,14 +105,14 @@ namespace shop
             LoadProducts();
             LoadCategories();
 
-
-            ProductsDataGrid.ItemsSource = Products;
+            UpdatePaginationButtons();
         }
 
         private void LoadProducts()
         {
             Products = GetProducts();
-            ProductsDataGrid.ItemsSource = Products;
+            UpdateCurrentPageView();
+            UpdatePaginationButtons();
         }
 
         private ObservableCollection<Product> GetProducts()
@@ -138,6 +177,29 @@ namespace shop
             {
                 MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}");
             }
+
+            if (productList.Count < 50)
+            {
+                for (int i = productList.Count; i < 50; i++)
+                {
+                    Product product = new Product
+                    {
+                        ID = i,
+                        Name = $"Продукт {i}",
+                        Description = $"Описание продукта {i}",
+                        Price = 10.0m * i,
+                        Quantity = i,
+                        Category = "Категория",
+                        CategoryID = 1,
+                        Brand = "Бренд",
+                        ImageSource = _defaultImage,
+                        Supplier = "Поставщик",
+                        ProductPhoto = ""
+                    };
+                    productList.Add(product);
+                }
+
+            }
             return productList;
         }
 
@@ -163,7 +225,6 @@ namespace shop
                 return _defaultImage;
             }
         }
-
 
         private void LoadCategories()
         {
@@ -228,7 +289,11 @@ namespace shop
 
             var sortedProducts = ApplySorting(filteredProducts);
 
-            ProductsDataGrid.ItemsSource = sortedProducts.ToList();
+            Products = new ObservableCollection<Product>(sortedProducts); 
+            _totalProductsCount = Products.Count;
+            CurrentPage = 1; 
+            UpdateCurrentPageView();
+            UpdatePaginationButtons();
         }
 
         private IEnumerable<Product> ApplyFilters()
@@ -302,7 +367,6 @@ namespace shop
             CategoryFilterComboBox.SelectedIndex = 0;
             currentCategoryFilter = Categories.FirstOrDefault();
 
-
             SortByComboBox.SelectedIndex = -1;
             SortOrderComboBox.SelectedIndex = -1;
             currentSortBy = null;
@@ -319,13 +383,12 @@ namespace shop
                 if (editForm.Product != null)
                 {
                     Products.Add(editForm.Product);
+                    LoadProducts();
 
                     MessageBox.Show($"Продукт '{editForm.Product.Name}' успешно создан.", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LoadProducts();
                 }
             }
         }
-
 
         private void EditProductButton_Click(object sender, RoutedEventArgs e)
         {
@@ -339,8 +402,8 @@ namespace shop
                     if (index != -1)
                     {
                         Products[index] = editForm.Product;
-                        MessageBox.Show($"Продукт '{editForm.Product.Name}' успешно отредактирован.", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
                         LoadProducts();
+                        MessageBox.Show($"Продукт '{editForm.Product.Name}' успешно отредактирован.", "Уведомление", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
@@ -349,7 +412,6 @@ namespace shop
                 MessageBox.Show("Пожалуйста, выберите товар для редактирования.");
             }
         }
-
 
         private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
         {
@@ -404,18 +466,86 @@ namespace shop
                     {
                         command.Parameters.AddWithValue("@ProductID", productId);
                         int count = Convert.ToInt32(command.ExecuteScalar());
-                        return count > 0; // Возвращает true, если товар используется в продажах
+                        return count > 0; 
                     }
                 }
             }
             catch (MySqlException ex)
             {
                 MessageBox.Show($"Ошибка при проверке связей с продажами: {ex.Message}");
-                return true; // Предполагаем, что используется, чтобы избежать удаления в случае ошибки
+                return true; 
             }
         }
-    }
 
+        private void UpdateCurrentPageView()
+        {
+            if (Products == null || Products.Count == 0)
+            {
+                CurrentProductsPageView = new ObservableCollection<Product>();
+                return;
+            }
+
+            int startIndex = (_currentPage - 1) * _pageSize;
+            int endIndex = Math.Min(startIndex + _pageSize, Products.Count);
+
+            List<Product> pageProducts = Products.Skip(startIndex).Take(endIndex - startIndex).ToList();
+            CurrentProductsPageView = new ObservableCollection<Product>(pageProducts);
+            ProductsDataGrid.ItemsSource = CurrentProductsPageView;
+            UpdatePaginationButtons();
+
+        }
+        private void PreviousPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                UpdateCurrentPageView();
+            }
+        }
+        private void NextPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage++;
+                UpdateCurrentPageView();
+            }
+        }
+        private void PageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && int.TryParse(button.Content.ToString(), out int pageNumber))
+            {
+                CurrentPage = pageNumber;
+                UpdateCurrentPageView();
+            }
+        }
+
+        private void UpdatePaginationButtons()
+        {
+            PaginationPanel.Children.Clear();
+
+            Button previousButton = new Button { Content = "←", Width = 30 };
+            previousButton.Click += PreviousPageButton_Click;
+            previousButton.IsEnabled = CurrentPage > 1;
+            PaginationPanel.Children.Add(previousButton);
+
+            for (int i = 1; i <= TotalPages; i++)
+            {
+                Button pageButton = new Button { Content = i.ToString(), Width = 30 };
+                pageButton.Click += PageButton_Click;
+                if (i == CurrentPage)
+                {
+                    pageButton.IsEnabled = false; 
+                }
+                PaginationPanel.Children.Add(pageButton);
+            }
+
+            Button nextButton = new Button { Content = "→", Width = 30 };
+            nextButton.Click += NextPageButton_Click;
+            nextButton.IsEnabled = CurrentPage < TotalPages;
+            PaginationPanel.Children.Add(nextButton);
+
+        }
+    }
 
     public class Product
     {
