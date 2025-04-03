@@ -17,7 +17,8 @@ namespace shop
     public partial class ProductsForm : UserControl, INotifyPropertyChanged
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
-        private ObservableCollection<Product> products;
+        private ObservableCollection<Product> products; 
+        private ObservableCollection<Product> _filteredAndSortedProducts;
         private ObservableCollection<Category> categories;
         private string currentSearchText = "";
         private Category currentCategoryFilter = null;
@@ -27,10 +28,10 @@ namespace shop
         private string imageFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         private BitmapImage _defaultImage;
 
-        private int _pageSize = 20; 
-        private int _currentPage = 1; 
+        private int _pageSize = 20;
+        private int _currentPage = 1;
         private int _totalProductsCount = 0; 
-        private ObservableCollection<Product> _currentProductsPageView; 
+        private ObservableCollection<Product> _currentProductsPageView;
         public ObservableCollection<Product> CurrentProductsPageView
         {
             get { return _currentProductsPageView; }
@@ -72,13 +73,10 @@ namespace shop
             {
                 products = value;
                 OnPropertyChanged(nameof(Products));
-                ApplyFilters();
-                _totalProductsCount = Products.Count;
-                CurrentPage = 1;
-                UpdateCurrentPageView();
-
+                ApplyFiltersAndSorting(); 
             }
         }
+
 
         public ObservableCollection<Category> Categories
         {
@@ -104,15 +102,11 @@ namespace shop
             _defaultImage = new BitmapImage(new Uri("pack://application:,,,/Resources/default.png"));
             LoadProducts();
             LoadCategories();
-
-            UpdatePaginationButtons();
         }
 
-        private void LoadProducts()
+        private async void LoadProducts()
         {
-            Products = GetProducts();
-            UpdateCurrentPageView();
-            UpdatePaginationButtons();
+            Products = GetProducts(); 
         }
 
         private ObservableCollection<Product> GetProducts()
@@ -285,15 +279,19 @@ namespace shop
 
         private void ApplyFiltersAndSorting()
         {
-            var filteredProducts = ApplyFilters();
+            IEnumerable<Product> filteredProducts = ApplyFilters();
 
             var sortedProducts = ApplySorting(filteredProducts);
 
-            Products = new ObservableCollection<Product>(sortedProducts); 
-            _totalProductsCount = Products.Count;
-            CurrentPage = 1; 
+            _filteredAndSortedProducts = new ObservableCollection<Product>(sortedProducts);
+
+            _totalProductsCount = _filteredAndSortedProducts.Count;
+
+            CurrentPage = 1;
+
             UpdateCurrentPageView();
             UpdatePaginationButtons();
+
         }
 
         private IEnumerable<Product> ApplyFilters()
@@ -466,29 +464,29 @@ namespace shop
                     {
                         command.Parameters.AddWithValue("@ProductID", productId);
                         int count = Convert.ToInt32(command.ExecuteScalar());
-                        return count > 0; 
+                        return count > 0;
                     }
                 }
             }
             catch (MySqlException ex)
             {
                 MessageBox.Show($"Ошибка при проверке связей с продажами: {ex.Message}");
-                return true; 
+                return true;
             }
         }
 
         private void UpdateCurrentPageView()
         {
-            if (Products == null || Products.Count == 0)
+            if (_filteredAndSortedProducts == null || _filteredAndSortedProducts.Count == 0)
             {
                 CurrentProductsPageView = new ObservableCollection<Product>();
                 return;
             }
 
             int startIndex = (_currentPage - 1) * _pageSize;
-            int endIndex = Math.Min(startIndex + _pageSize, Products.Count);
+            int endIndex = Math.Min(startIndex + _pageSize, _filteredAndSortedProducts.Count);
 
-            List<Product> pageProducts = Products.Skip(startIndex).Take(endIndex - startIndex).ToList();
+            List<Product> pageProducts = _filteredAndSortedProducts.Skip(startIndex).Take(endIndex - startIndex).ToList();
             CurrentProductsPageView = new ObservableCollection<Product>(pageProducts);
             ProductsDataGrid.ItemsSource = CurrentProductsPageView;
             UpdatePaginationButtons();
@@ -534,7 +532,7 @@ namespace shop
                 pageButton.Click += PageButton_Click;
                 if (i == CurrentPage)
                 {
-                    pageButton.IsEnabled = false; 
+                    pageButton.IsEnabled = false;
                 }
                 PaginationPanel.Children.Add(pageButton);
             }
@@ -546,6 +544,7 @@ namespace shop
 
         }
     }
+}
 
     public class Product
     {
@@ -577,6 +576,8 @@ namespace shop
     public class Supplier
     {
         public int SupplierID { get; set; }
-        public string SupplierName { get; set; }
+        public string SupplierName
+        {
+            get; set;
+        }
     }
-}

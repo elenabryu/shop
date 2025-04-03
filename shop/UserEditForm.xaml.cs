@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using MySql.Data.MySqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace shop
 {
@@ -98,6 +100,7 @@ namespace shop
             }
         }
 
+
         private void LoadUserData(int userId)
         {
             try
@@ -122,14 +125,22 @@ namespace shop
                         {
                             if (reader.Read())
                             {
+                                // Загружаем сотрудника
                                 int employeeId = Convert.ToInt32(reader["UserEmployeeID"]);
-                                EmployeeComboBox.SelectedItem = ((List<Employee>)EmployeeComboBox.ItemsSource).FirstOrDefault(e => e.EmployeeID == employeeId);
+                                Employee selectedEmployee = ((List<Employee>)EmployeeComboBox.ItemsSource).FirstOrDefault(e => e.EmployeeID == employeeId);
+                                EmployeeComboBox.SelectedItem = selectedEmployee;
 
+                                // Загружаем логин
                                 LoginTextBox.Text = reader["UserLogin"].ToString();
-                                PasswordTextBox.Text = reader["UserPassword"].ToString();
 
+                                // Загружаем пароль
+                                PasswordTextBox.Tag = reader["UserPassword"].ToString();
+                                PasswordTextBox.Text = "";
+
+                                // Загружаем роль
                                 int roleId = Convert.ToInt32(reader["UserRole"]);
-                                RoleComboBox.SelectedItem = ((List<Role>)RoleComboBox.ItemsSource).FirstOrDefault(r => r.RoleID == roleId);
+                                Role selectedRole = ((List<Role>)RoleComboBox.ItemsSource).FirstOrDefault(r => r.RoleID == roleId);
+                                RoleComboBox.SelectedItem = selectedRole;
                             }
                         }
                     }
@@ -143,7 +154,7 @@ namespace shop
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (EmployeeComboBox.SelectedItem == null || string.IsNullOrWhiteSpace(LoginTextBox.Text) || string.IsNullOrWhiteSpace(PasswordTextBox.Text) || RoleComboBox.SelectedItem == null)
+            if (EmployeeComboBox.SelectedItem == null || string.IsNullOrWhiteSpace(LoginTextBox.Text) || RoleComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Пожалуйста, заполните все обязательные поля.");
                 return;
@@ -185,6 +196,17 @@ namespace shop
                     }
 
                     string query = "";
+                    string hashedPassword = "";
+
+                    if (!string.IsNullOrWhiteSpace(PasswordTextBox.Text))
+                    {
+                        hashedPassword = HashPassword(PasswordTextBox.Text);
+                    }
+                    else
+                    {
+                        hashedPassword = PasswordTextBox.Tag as string;
+                    }
+
 
                     if (_userId.HasValue)
                     {
@@ -207,7 +229,7 @@ namespace shop
                     {
                         command.Parameters.AddWithValue("@UserEmployeeID", selectedEmployee.EmployeeID);
                         command.Parameters.AddWithValue("@UserLogin", LoginTextBox.Text);
-                        command.Parameters.AddWithValue("@UserPassword", PasswordTextBox.Text);
+                        command.Parameters.AddWithValue("@UserPassword", hashedPassword);
                         command.Parameters.AddWithValue("@UserRole", selectedRole.RoleID);
 
                         if (_userId.HasValue)
@@ -229,6 +251,22 @@ namespace shop
                 MessageBox.Show($"Ошибка при сохранении пользователя: {ex.Message}");
             }
         }
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;

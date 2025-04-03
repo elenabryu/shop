@@ -174,9 +174,7 @@
             </Button>
             <Button Content="Удалить товар" Margin="5" Width="129" Click="DeleteProductButton_Click">
                 <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5
-
-,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                         <LinearGradientBrush.RelativeTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleY="1" ScaleX="-1"/>
