@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MySql.Data.MySqlClient;
 
@@ -17,7 +19,7 @@ namespace shop
     public partial class ProductsForm : UserControl, INotifyPropertyChanged
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["MySQLConnection"].ConnectionString;
-        private ObservableCollection<Product> products; 
+        private ObservableCollection<Product> products;
         private ObservableCollection<Product> _filteredAndSortedProducts;
         private ObservableCollection<Category> categories;
         private string currentSearchText = "";
@@ -28,9 +30,9 @@ namespace shop
         private string imageFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         private BitmapImage _defaultImage;
 
-        private int _pageSize = 20;
+        private int _pageSize = 6; 
         private int _currentPage = 1;
-        private int _totalProductsCount = 0; 
+        private int _totalProductsCount = 0;
         private ObservableCollection<Product> _currentProductsPageView;
         public ObservableCollection<Product> CurrentProductsPageView
         {
@@ -60,9 +62,50 @@ namespace shop
         {
             get
             {
-                return (int)Math.Ceiling((double)_totalProductsCount / _pageSize);
+                return (int)Math.Ceiling((double)TotalFilteredProductsCount / _pageSize); 
             }
         }
+
+        private int _totalFilteredProductsCount;
+
+        public int TotalFilteredProductsCount
+        {
+            get { return _totalFilteredProductsCount; }
+            set
+            {
+                _totalFilteredProductsCount = value;
+                OnPropertyChanged(nameof(TotalFilteredProductsCount));
+                OnPropertyChanged(nameof(DisplayedProductsInfo));
+                OnPropertyChanged(nameof(TotalPages));
+                UpdatePaginationButtons();
+            }
+        }
+
+        public string DisplayedProductsInfo
+        {
+            get
+            {
+                if (_filteredAndSortedProducts == null || _filteredAndSortedProducts.Count == 0)
+                {
+                    return $"0 из {TotalProductsCount}"; 
+                }
+
+                int displayedCount = CurrentProductsPageView?.Count ?? 0;
+
+                return $"{displayedCount} из {TotalFilteredProductsCount}";
+            }
+        }
+
+        public int TotalProductsCount
+        {
+            get { return _totalProductsCount; }
+            set
+            {
+                _totalProductsCount = value;
+                OnPropertyChanged(nameof(TotalProductsCount));
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -73,7 +116,7 @@ namespace shop
             {
                 products = value;
                 OnPropertyChanged(nameof(Products));
-                ApplyFiltersAndSorting(); 
+                ApplyFiltersAndSorting();
             }
         }
 
@@ -106,7 +149,9 @@ namespace shop
 
         private async void LoadProducts()
         {
-            Products = GetProducts(); 
+            Products = GetProducts();
+            TotalProductsCount = Products.Count;
+            ApplyFiltersAndSorting();
         }
 
         private ObservableCollection<Product> GetProducts()
@@ -172,28 +217,6 @@ namespace shop
                 MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}");
             }
 
-            if (productList.Count < 50)
-            {
-                for (int i = productList.Count; i < 50; i++)
-                {
-                    Product product = new Product
-                    {
-                        ID = i,
-                        Name = $"Продукт {i}",
-                        Description = $"Описание продукта {i}",
-                        Price = 10.0m * i,
-                        Quantity = i,
-                        Category = "Категория",
-                        CategoryID = 1,
-                        Brand = "Бренд",
-                        ImageSource = _defaultImage,
-                        Supplier = "Поставщик",
-                        ProductPhoto = ""
-                    };
-                    productList.Add(product);
-                }
-
-            }
             return productList;
         }
 
@@ -285,7 +308,7 @@ namespace shop
 
             _filteredAndSortedProducts = new ObservableCollection<Product>(sortedProducts);
 
-            _totalProductsCount = _filteredAndSortedProducts.Count;
+            TotalFilteredProductsCount = _filteredAndSortedProducts.Count;
 
             CurrentPage = 1;
 
@@ -333,7 +356,6 @@ namespace shop
             currentSortOrder = (SortOrderComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
             ApplyFiltersAndSorting();
         }
-
         private IEnumerable<Product> ApplySorting(IEnumerable<Product> productsToSort)
         {
             if (string.IsNullOrEmpty(currentSortBy) || string.IsNullOrEmpty(currentSortOrder))
@@ -480,6 +502,10 @@ namespace shop
             if (_filteredAndSortedProducts == null || _filteredAndSortedProducts.Count == 0)
             {
                 CurrentProductsPageView = new ObservableCollection<Product>();
+                TotalFilteredProductsCount = 0;
+                OnPropertyChanged(nameof(DisplayedProductsInfo));
+                OnPropertyChanged(nameof(TotalPages)); // Add this line
+                UpdatePaginationButtons();
                 return;
             }
 
@@ -489,6 +515,7 @@ namespace shop
             List<Product> pageProducts = _filteredAndSortedProducts.Skip(startIndex).Take(endIndex - startIndex).ToList();
             CurrentProductsPageView = new ObservableCollection<Product>(pageProducts);
             ProductsDataGrid.ItemsSource = CurrentProductsPageView;
+            OnPropertyChanged(nameof(DisplayedProductsInfo));
             UpdatePaginationButtons();
 
         }
@@ -544,15 +571,23 @@ namespace shop
 
         }
     }
-}
 
-    public class Product
+    public class Product : INotifyPropertyChanged
     {
+        private int _quantity;
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
+            }
+        }
         public string Category { get; set; }
         public int? CategoryID { get; set; }
         public string Brand { get; set; }
@@ -560,6 +595,13 @@ namespace shop
         public string Supplier { get; set; }
 
         public string ProductPhoto { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class Category
@@ -581,3 +623,59 @@ namespace shop
             get; set;
         }
     }
+
+    public class IntToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int intValue && parameter is string stringParameter && int.TryParse(stringParameter, out int threshold))
+            {
+                return intValue < threshold;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class QuantityToColorConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values == null || values.Length == 0 || values[0] == DependencyProperty.UnsetValue)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
+            if (!(values[0] is int quantity))
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            string colorParameter = parameter as string;
+
+            switch (colorParameter)
+            {
+                case "LightBlue":
+                    if (quantity < 20)
+                    {
+                        return "LightBlue";
+                    }
+                    break;
+                case "Aqua":
+                    if (quantity >= 20 && quantity <= 50)
+                    {
+                        return "Aqua";
+                    }
+                    break;
+            }
+            return Binding.DoNothing;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

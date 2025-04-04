@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:shop"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <local:QuantityToColorConverter x:Key="QuantityToColorConverter" />
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="Height" Value="36"/>
@@ -51,6 +52,35 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="5"/>
         </Style>
+
+ <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White" />
+            <Style.Triggers>
+            <DataTrigger Binding="{Binding Quantity}" Value="{x:Null}">
+                <Setter Property="Background" Value="White"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Quantity}" Value="-1">
+                <Setter Property="Background" Value="White"/>
+            </DataTrigger>
+            <DataTrigger Value="LightBlue">
+                <DataTrigger.Binding>
+                    <MultiBinding Converter="{StaticResource QuantityToColorConverter}" ConverterParameter="LightBlue">
+                        <Binding Path="Quantity" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <Setter Property="Background" Value="LightBlue" />
+            </DataTrigger>
+                <DataTrigger Value="Aqua">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource QuantityToColorConverter}" ConverterParameter="Aqua">
+                            <Binding Path="Quantity" />
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="Background" Value="Aqua" />
+                </DataTrigger>
+            </Style.Triggers>
+    </Style>
+
     </UserControl.Resources>
 
     <Grid Margin="0,0,10,0">
@@ -62,6 +92,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -152,7 +183,7 @@
                         <GradientStop Color="#FF80B3C3" Offset="1"/>
                         <GradientStop Color="White" Offset="0.224"/>
                         <GradientStop Color="#FFB8DFF1" Offset="0.788"/>
-                    </LinearGradientBrush>
+                        </LinearGradientBrush>
                 </Button.Background>
             </Button>
             <Button Content="Редактировать товар" Margin="5" Width="165" Click="EditProductButton_Click">
@@ -192,5 +223,13 @@
         </StackPanel>
 
         <StackPanel x:Name="PaginationPanel" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10"/>
+
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Rectangle Width="20" Height="20" Fill="LightBlue" Margin="0,0,5,0"/>
+            <TextBlock Text="Менее 20 шт. количество на складе" Margin="0,0,10,0"/>
+            <Rectangle Width="20" Height="20" Fill="Aqua" Margin="0,0,5,0"/>
+            <TextBlock Text="От 20 до 50 шт. количество на складе" Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding DisplayedProductsInfo}" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>
