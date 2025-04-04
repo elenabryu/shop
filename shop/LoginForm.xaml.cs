@@ -7,7 +7,8 @@ using MySql.Data.MySqlClient;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Threading; 
+using System.Windows.Threading;
+using System.Linq;
 
 namespace shop
 {
@@ -22,71 +23,9 @@ namespace shop
         private bool _isAccountLocked = false;
         private readonly object _lock = new object();
 
-        private DispatcherTimer _inactivityTimer;
-        private DateTime _lastActivityTime;
-        private int _inactivityTimeoutSeconds;
-
         public LoginForm()
         {
             InitializeComponent();
-            InitializeInactivityTimer(); 
-        }
-
-        private void InitializeInactivityTimer()
-        {
-            try
-            {
-                _inactivityTimeoutSeconds = int.Parse(ConfigurationManager.AppSettings["InactivityTimeoutSeconds"]);
-            }
-            catch (Exception ex)
-            {
-                _inactivityTimeoutSeconds = 30;
-                MessageBox.Show($"Не удалось прочитать 'InactivityTimeoutSeconds' из конфигурации. Используется значение по умолчанию: 30 секунд. Ошибка: {ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
-            _inactivityTimer = new DispatcherTimer();
-            _inactivityTimer.Interval = TimeSpan.FromSeconds(1); 
-            _inactivityTimer.Tick += InactivityTimer_Tick;
-
-            this.PreviewMouseMove += UserActivity;
-            this.PreviewKeyDown += UserActivity;
-            this.PreviewMouseUp += UserActivity; 
-            this.PreviewKeyUp += UserActivity;    
-            this.TouchMove += UserActivity; 
-            this.TouchDown += UserActivity;
-            this.TouchUp += UserActivity;
-
-            ResetInactivityTimer(); 
-            _inactivityTimer.Start();
-        }
-
-        private void UserActivity(object sender, EventArgs e)
-        {
-            ResetInactivityTimer();
-        }
-
-        private void ResetInactivityTimer()
-        {
-            _lastActivityTime = DateTime.Now;
-        }
-
-        private void InactivityTimer_Tick(object sender, EventArgs e)
-        {
-            TimeSpan idleTime = DateTime.Now - _lastActivityTime;
-
-            if (idleTime.TotalSeconds >= _inactivityTimeoutSeconds)
-            {
-                _inactivityTimer.Stop();
-            }
-        }
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            if (_inactivityTimer != null)
-            {
-                _inactivityTimer.Stop();
-            }
         }
 
         private void GenerateCaptcha()
@@ -176,7 +115,8 @@ namespace shop
                                 case 1:
                                     AdminMainForm adminForm = new AdminMainForm();
                                     adminForm.Show();
-                                    break;
+                                    this.Close(); 
+                                    return;
                                 case 2:
                                     string employeeIdQuery = "SELECT UserEmployeeID FROM User WHERE UserLogin = @Login";
                                     using (MySqlCommand employeeIdCommand = new MySqlCommand(employeeIdQuery, connection))
@@ -188,6 +128,8 @@ namespace shop
                                         sellerForm.LoggedInEmployeeID = loggedInEmployeeID;
 
                                         sellerForm.Show();
+                                        this.Close();
+                                        return;
                                     }
                                     break;
                                 default:
@@ -195,7 +137,7 @@ namespace shop
                                     return;
                             }
 
-                            this.Close();
+
                         }
                         else
                         {
@@ -338,3 +280,5 @@ namespace shop
         }
     }
 }
+
+   
