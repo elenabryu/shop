@@ -58,24 +58,20 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Название -->
             <RowDefinition Height="*"/>
-            <!-- DataGrid -->
             <RowDefinition Height="Auto"/>
-            <!-- Кнопки -->
         </Grid.RowDefinitions>
 
-        <!-- Название -->
         <TextBlock Grid.Row="0" Text="Управление сотрудниками" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" FontFamily="Comic Sans MS"/>
 
         <DataGrid x:Name="ProductsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Margin="10" Background="Snow">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding EmployeeSurname}" Width="*"/>
-                <DataGridTextColumn Header="Имя" Binding="{Binding EmployeeName}" Width="*"/>
-                <DataGridTextColumn Header="Отчество" Binding="{Binding EmployeePatronymic}" Width="*"/>
-                <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Width="*"/>
-                <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" Width="*"/>
-                <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="*"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding MaskedSurname}" Width="*"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding MaskedName}" Width="*"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding MaskedPatronymic}" Width="*"/>
+                <DataGridTextColumn Header="Почта" Binding="{Binding MaskedEmail}" Width="*"/>
+                <DataGridTextColumn Header="Номер телефона" Binding="{Binding MaskedPhoneNumber}" Width="*"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding MaskedAddress}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
