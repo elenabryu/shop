@@ -37,7 +37,7 @@ namespace shop
                         {
                             while (reader.Read())
                             {
-                                Clients.Add(new Client
+                                Client client = new Client
                                 {
                                     ClientID = reader.GetInt32("ClientID"),
                                     ClientSurname = reader.GetString("ClientSurname"),
@@ -45,7 +45,14 @@ namespace shop
                                     ClientPatronymic = reader.GetString("ClientPatronymic"),
                                     Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : reader.GetString("Email"),
                                     PhoneNumber = reader.GetString("PhoneNumber")
-                                });
+                                };
+                                client.MaskedSurname = MaskName(client.ClientSurname);
+                                client.MaskedName = MaskName(client.ClientName);
+                                client.MaskedPatronymic = MaskName(client.ClientPatronymic);
+                                client.MaskedEmail = MaskEmail(client.Email);
+                                client.MaskedPhoneNumber = MaskPhoneNumber(client.PhoneNumber);
+
+                                Clients.Add(client);
                             }
                         }
                     }
@@ -59,6 +66,80 @@ namespace shop
             {
                 MessageBox.Show("Ошибка при загрузке данных: " + ex.Message);
             }
+        }
+        public static string MaskFullName(string fullName)
+        {
+            if (string.IsNullOrEmpty(fullName))
+            {
+                return fullName;
+            }
+
+            string[] names = fullName.Split(' ');
+            for (int i = 0; i < names.Length; i++)
+            {
+                names[i] = MaskName(names[i]);
+            }
+            return string.Join(" ", names);
+        }
+
+        public static string MaskName(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name.Length <= 2)
+            {
+                return new string('*', name?.Length ?? 0);
+            }
+
+            return name.Substring(0, name.Length - 2) + "**";
+        }
+
+        public static string MaskEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return email;
+            }
+
+            var parts = email.Split('@');
+            if (parts.Length != 2)
+            {
+                return email;
+            }
+
+            string userName = parts[0];
+            string domain = parts[1];
+
+            if (userName.Length <= 3)
+            {
+                userName = new string('*', userName.Length);
+            }
+            else
+            {
+                userName = userName.Substring(0, 1) + new string('*', userName.Length - 3) + userName.Substring(userName.Length - 2);
+            }
+
+            var domainParts = domain.Split('.');
+            if (domainParts.Length > 1)
+            {
+                domainParts[0] = domainParts[0].Length > 1 ? domainParts[0].Substring(0, 1) + new string('*', domainParts[0].Length - 1) : "*";
+                domain = string.Join(".", domainParts);
+            }
+            else
+            {
+                domain = new string('*', domain.Length);
+            }
+
+            return $"{userName}@{domain}";
+        }
+
+
+        private string MaskPhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrEmpty(phoneNumber) || phoneNumber.Length <= 4)
+            {
+                return new string('*', phoneNumber?.Length ?? 0);
+            }
+
+            return phoneNumber.Substring(0, phoneNumber.Length - 4) + "****";
         }
         private void AddClient_Click(object sender, RoutedEventArgs e)
         {
@@ -101,5 +182,12 @@ namespace shop
         public string ClientPatronymic { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+
+        public string MaskedSurname { get; set; }
+        public string MaskedName { get; set; }
+        public string MaskedPatronymic { get; set; }
+        public string MaskedEmail { get; set; }
+        public string MaskedPhoneNumber { get; set; }
+        public string MaskedAddress { get; set; }
     }
 }

@@ -72,11 +72,11 @@
 
         <DataGrid x:Name="ProductsDataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,10,10,0" Background="Snow">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding ClientSurname}" Width="*"/>
-                <DataGridTextColumn Header="Имя" Binding="{Binding ClientName}" Width="*"/>
-                <DataGridTextColumn Header="Отчество" Binding="{Binding ClientPatronymic}" Width="*"/>
-                <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Width="*"/>
-                <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" Width="*"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding MaskedSurname}" Width="*"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding MaskedName}" Width="*"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding MaskedPatronymic}" Width="*"/>
+                <DataGridTextColumn Header="Почта" Binding="{Binding MaskedEmail}" Width="*"/>
+                <DataGridTextColumn Header="Номер телефона" Binding="{Binding MaskedPhoneNumber}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
